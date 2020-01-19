@@ -8,6 +8,9 @@ namespace DotsAndBoxes
 {
     class Human : Player
     {
-
+        public override void makeMove(Move move)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

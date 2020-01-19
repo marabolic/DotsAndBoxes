@@ -32,6 +32,9 @@ namespace DotsAndBoxes
             }
         }
 
-       
+        public override void makeMove(Move move)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -25,9 +25,11 @@ namespace DotsAndBoxes
         Game game;
         int currX, currY;
         Computer.STRATEGY difficulty;
-        
+        bool clicked = false, active = false;
 
 
+
+        //loading
         void setGrid(DataGridView dgv) { 
             dgv.BackgroundColor = Color.White;
             dgv.RowHeadersVisible = false;
@@ -62,54 +64,62 @@ namespace DotsAndBoxes
             dgv.SetBounds(20, 20, dgv.Width, dgv.Height);
         }
 
-        private void HumanHumanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            game = new Game(new Human(), new Human());
+        public void Form1_Load(object sender, EventArgs e)  {
+            //showDimensionsChoice();
+            numOfColumns = Form2.NumCols();
+            numOfRows = Form2.NumRows();
+            dgv = dataGridView1;
+            easyToolStripMenuItem.Checked = true;
+            setGrid(dgv);
         }
 
-        private void HumanComputerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            game = new Game(new Human(), new Computer(difficulty));
-        }
 
-        private void ComputerHumanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            game = new Game(new Computer(difficulty), new Human());
-        }
 
-        private void ComputerComputerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            game = new Game(new Computer(difficulty), new Computer(difficulty));
-        }
+        //mouse event
 
         private void DataGridView1_MouseClick(object sender, MouseEventArgs e) {
-            currX = e.X; currY = e.Y;
-            
-            richTextBox1.Text += convertCoordX().ToString() + "; " + convertCoordY().ToString() + "\n";
-            dgv.Update();
+            currX = e.X; currY = e. Y;
+            clicked = true;
+            active = true;
+            richTextBox1.Text += convertCoordX().ToString() + "; " + convertCoordY().ToString() + " ";
+            dgv.Update(); 
 
         }
+
+
+
+        //drawing
 
         private void DataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             int xLeft = e.CellBounds.X + move, yUp = e.CellBounds.Y + move,
                 xRight = e.CellBounds.X + boxSize + move, yDown = e.CellBounds.Y + boxSize + move;
 
-            drawDefaultLines(e, xLeft, xRight, yUp, yDown);
-            drawDots(e, xLeft, xRight, yUp, yDown);
-
-            char side = findMin(currX, currY, xLeft, xRight, yUp, yDown);
-            Pen p = new Pen(Color.DarkRed);
-            drawColouredLine(side, e, p, xLeft, xRight, yUp, yDown);
-            
+            if (!clicked) {
+                drawDefaultLines(e, xLeft, xRight, yUp, yDown);
+                Brush b = new SolidBrush(Color.Gray);
+                drawDots(e, b, xLeft, xRight, yUp, yDown);
+            }
+            else {
+                if (active) {
+                    char side = findMin(currX, currY, xLeft, xRight, yUp, yDown);
+                    richTextBox1.Text += side.ToString() + "\n";
+                    Pen p;
+                    if (game.getPlayer1().isMyMove()) {
+                        p = new Pen(Color.Blue);
+                    }
+                    else {
+                        p = new Pen(Color.DarkRed);
+                    }
+                    drawColouredLine(side, e, p, xLeft, xRight, yUp, yDown);
+                }
+                active = false;
+            }
             e.Handled = true;
         }
 
-
-        public void drawDots(DataGridViewCellPaintingEventArgs e, int xLeft, int xRight, int yUp, int yDown)
+        public void drawDots(DataGridViewCellPaintingEventArgs e, Brush b, int xLeft, int xRight, int yUp, int yDown)
         {
-            Brush b = new SolidBrush(Color.Gray);
-
             if (e.ColumnIndex != 0)
             {
                 GraphicsExtensions.FillCircle(e.Graphics, b, xLeft, yUp, 4);
@@ -187,6 +197,10 @@ namespace DotsAndBoxes
             }
         }
 
+        
+        
+        //menu items
+
         private void EasyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             difficulty = Computer.STRATEGY.EASY;
@@ -211,30 +225,36 @@ namespace DotsAndBoxes
             hardToolStripMenuItem.Checked = true;
         }
 
-        private void DataGridView1_SelectionChanged(object sender, EventArgs e) {
-            dgv.ClearSelection();
-        } 
-
-        public void Form1_Load(object sender, EventArgs e) {
-            //showDimensionsChoice();
-            numOfColumns = Form2.NumCols();
-            numOfRows = Form2.NumRows(); 
-            dgv = dataGridView1;
-            easyToolStripMenuItem.Checked = true;
-            setGrid(dgv);
-        }
-
-        private int convertCoordX()
+        private void HumanHumanToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            return currY / boxSize;
+            game = new Game(new Human(), new Human());
         }
 
-        private int convertCoordY()
+        private void HumanComputerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            return currX / boxSize;
+
+            game = new Game(new Human(), new Computer(difficulty));
+        }
+
+        private void ComputerHumanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            game = new Game(new Computer(difficulty), new Human());
+        }
+
+        private void ComputerComputerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            game = new Game(new Computer(difficulty), new Computer(difficulty));
         }
 
 
+
+
+        //additional methods
+
+        private int convertCoordX() { return currY / boxSize; }
+
+        private int convertCoordY() { return currX / boxSize; }
+     
         private char findMin(int x, int y, int l, int r, int u, int d)
         {
             int min;
@@ -252,7 +272,7 @@ namespace DotsAndBoxes
             if (min > d - y)
             {
                 min = d - y;
-                side = 'y';
+                side = 'd';
             }
             if (min > x - l)
             {
