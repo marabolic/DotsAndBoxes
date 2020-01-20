@@ -10,13 +10,14 @@ namespace DotsAndBoxes
     abstract class Player
     {
         Color color; //red second, blue first player
-        bool myMove = false;
+        bool myTurn = false;
+        
 
         public void setColor(Color color) { this.color = color; }
 
-        public bool isMyMove() { return myMove; }
+        public bool isMyMove() { return myTurn; }
 
-        public void setMyMove(bool myMove) { this.myMove = myMove; }
+        public void setMyTurn(bool myTurn) { this.myTurn = myTurn; }
 
         public abstract void makeMove(Move move);
     }

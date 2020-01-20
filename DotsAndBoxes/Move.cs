@@ -13,12 +13,13 @@ namespace DotsAndBoxes
             VERTICAL = 1
         }
         int row, column;
-
         DIRECTION direction;
+
         public Move(int row, int col, DIRECTION dir) {
             direction = dir;
             this.row = row;
             this.column = col;
+            
         }
 
         public DIRECTION getDirection() { return direction; }

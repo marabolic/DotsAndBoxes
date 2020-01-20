@@ -22,7 +22,7 @@ namespace DotsAndBoxes
             this.player2 = player2;
             player1.setColor(Color.Blue);
             player2.setColor(Color.DarkRed);
-            player1.setMyMove(true);
+            player1.setMyTurn(true);
             gameState = new GameState();
         }
 
@@ -32,6 +32,27 @@ namespace DotsAndBoxes
 
         }
 
+        public string map(Move m)
+        {
+            string s = gameState.map(m);
+            return s;
+        }
+
+        public void checkExists(Move m)
+        {
+            gameState.exists(m);
+        }
+
+        public bool makesSquare(int r, int c)
+        {
+            return gameState.makesSquare(r, c);
+        }
+
+        public void addMove(Move m)
+        {
+            gameState.addMove(m);
+        }
+        
         public Player getPlayer1() { return player1; }
         public Player getPlayer2() { return player2; }
        

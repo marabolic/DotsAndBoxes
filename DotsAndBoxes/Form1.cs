@@ -18,6 +18,7 @@ namespace DotsAndBoxes
         {
             InitializeComponent();
         }
+
         DataGridView dgv;  
         int numOfRows, numOfColumns;
         public int boxSize;
@@ -29,7 +30,7 @@ namespace DotsAndBoxes
 
 
 
-        //loading
+        //LOADING FORM
         void setGrid(DataGridView dgv) { 
             dgv.BackgroundColor = Color.White;
             dgv.RowHeadersVisible = false;
@@ -73,22 +74,21 @@ namespace DotsAndBoxes
             setGrid(dgv);
         }
 
+         
 
-
-        //mouse event
+        //MOUSE EVENT
 
         private void DataGridView1_MouseClick(object sender, MouseEventArgs e) {
             currX = e.X; currY = e. Y;
             clicked = true;
             active = true;
-            richTextBox1.Text += convertCoordX().ToString() + "; " + convertCoordY().ToString() + " ";
             dgv.Update(); 
 
         }
 
 
 
-        //drawing
+        //DRAWING
 
         private void DataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
@@ -101,15 +101,27 @@ namespace DotsAndBoxes
                 drawDots(e, b, xLeft, xRight, yUp, yDown);
             }
             else {
-                if (active) {
+                if (active && game != null) {
                     char side = findMin(currX, currY, xLeft, xRight, yUp, yDown);
-                    richTextBox1.Text += side.ToString() + "\n";
+                    //richTextBox1.Text += side.ToString() + "\n"; 
                     Pen p;
-                    if (game.getPlayer1().isMyMove()) {
+                    if (game.getPlayer1().isMyMove())  {
                         p = new Pen(Color.Blue);
+                        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
+                        {
+                            game.getPlayer1().setMyTurn(true);
+                            game.getPlayer2().setMyTurn(false);
+                        }
+                        else
+                        {
+                            game.getPlayer1().setMyTurn(false);
+                            game.getPlayer2().setMyTurn(true);
+                        }
                     }
                     else {
                         p = new Pen(Color.DarkRed);
+                        game.getPlayer1().setMyTurn(true);
+                        game.getPlayer2().setMyTurn(false);
                     }
                     drawColouredLine(side, e, p, xLeft, xRight, yUp, yDown);
                 }
@@ -176,30 +188,53 @@ namespace DotsAndBoxes
             switch (side){
                 case 'l':
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
+                        //if
                         e.Graphics.DrawLine(p, xLeft, yUp + move, xLeft, yDown);
+                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.VERTICAL);
                     }
                     break;
                 case 'r':
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
                         e.Graphics.DrawLine(p, xRight, yUp + move, xRight, yDown);
-                    }
+                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.VERTICAL);
+                    } 
                     break;
                 case 'u':
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
                         e.Graphics.DrawLine(p, xLeft + move, yUp, xRight, yUp);
+                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.HORIZONTAL);
                     }
                     break;
                 case 'd':
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()){
                         e.Graphics.DrawLine(p, xRight, yDown + move, xLeft, yDown);
+                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.HORIZONTAL);
                     }
                     break;
             }
         }
 
+        private void drawMove(Pen p, DataGridViewCellPaintingEventArgs e, Move.DIRECTION direction)
+        {
+            if (p.Color == Color.Blue)
+            {
+                Move m = new Move(e.RowIndex, e.ColumnIndex, direction);
+                //game.getPlayer1().makeMove(m);
+                game.addMove(m);
+                richTextBox1.Text += game.map(m) + "\n";
+            }
+            else
+            {
+                Move m = new Move(e.RowIndex, e.ColumnIndex, direction);
+                game.addMove(m);
+                //game.getPlayer2().makeMove(m);
+                richTextBox1.Text += game.map(m) + "\n";
+            }
+        }
         
-        
-        //menu items
+
+
+        //MENI ITEMS
 
         private void EasyToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -228,6 +263,7 @@ namespace DotsAndBoxes
         private void HumanHumanToolStripMenuItem_Click(object sender, EventArgs e)
         {
             game = new Game(new Human(), new Human());
+            
         }
 
         private void HumanComputerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -249,7 +285,7 @@ namespace DotsAndBoxes
 
 
 
-        //additional methods
+        //ADDITIONAL METHODS
 
         private int convertCoordX() { return currY / boxSize; }
 
