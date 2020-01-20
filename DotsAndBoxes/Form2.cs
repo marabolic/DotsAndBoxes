@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DotsAndBoxes
+namespace etf.dotsandboxes.bm170614d
 {
     public partial class Form2 : Form
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DotsAndBoxes
+namespace etf.dotsandboxes.bm170614d
 {
     static class Program
     {

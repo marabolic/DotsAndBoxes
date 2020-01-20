@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace DotsAndBoxes
+namespace etf.dotsandboxes.bm170614d
 {
     public static class GraphicsExtensions
     {

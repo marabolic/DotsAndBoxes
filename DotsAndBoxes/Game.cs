@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
 
-namespace DotsAndBoxes
+namespace etf.dotsandboxes.bm170614d
 {
     class Game 
     {
@@ -34,7 +34,7 @@ namespace DotsAndBoxes
 
         public string map(Move m)
         {
-            string s = gameState.map(m);
+            string s = GameState.map(m);
             return s;
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotsAndBoxes
+namespace etf.dotsandboxes.bm170614d
 {
     abstract class Strategy
     {

@@ -1,4 +1,4 @@
-﻿namespace DotsAndBoxes
+﻿namespace etf.dotsandboxes.bm170614d
 {
     partial class Form1
     {

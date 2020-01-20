@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 
 
-namespace DotsAndBoxes
+namespace etf.dotsandboxes.bm170614d
 {
     public partial class Form1 : Form
     {
@@ -27,8 +27,6 @@ namespace DotsAndBoxes
         int currX, currY;
         Computer.STRATEGY difficulty;
         bool clicked = false, active = false;
-
-
 
         //LOADING FORM
         void setGrid(DataGridView dgv) { 
@@ -74,7 +72,7 @@ namespace DotsAndBoxes
             setGrid(dgv);
         }
 
-         
+
 
         //MOUSE EVENT
 
@@ -120,8 +118,17 @@ namespace DotsAndBoxes
                     }
                     else {
                         p = new Pen(Color.DarkRed);
-                        game.getPlayer1().setMyTurn(true);
-                        game.getPlayer2().setMyTurn(false);
+                        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
+                        {
+                            game.getPlayer1().setMyTurn(false);
+                            game.getPlayer2().setMyTurn(true);
+                        }
+                        else
+                        {
+                            game.getPlayer1().setMyTurn(true);
+                            game.getPlayer2().setMyTurn(false);
+                        }
+
                     }
                     drawColouredLine(side, e, p, xLeft, xRight, yUp, yDown);
                 }
@@ -234,7 +241,7 @@ namespace DotsAndBoxes
         
 
 
-        //MENI ITEMS
+        //MENU ITEMS
 
         private void EasyToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -318,7 +325,6 @@ namespace DotsAndBoxes
 
             return side;
         }
-
 
 
     }

@@ -5,21 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace DotsAndBoxes
+namespace etf.dotsandboxes.bm170614d
 {
     class GameState {
 
         public static Dictionary<Move, bool> moves = new Dictionary<Move, bool>();
-        public static Dictionary<Move, string> moveString = new Dictionary<Move, string>();
-
+      
         static int numRows;
         static int numColumns;
 
-        public GameState() {
+        public GameState()
+        {
 
         }
 
-        public string map(Move m)
+        public static string map(Move m)
         {
             char let;
             int num;
@@ -40,7 +40,7 @@ namespace DotsAndBoxes
             return s;
         }
 
-        public Move map(string s)
+        public static Move map(string s)
         {
             char first = s[0];
             char second = s[1];
@@ -61,12 +61,11 @@ namespace DotsAndBoxes
             return m;
         }
 
-        public string exists(Move m) {
-            string str;
-            moveString.TryGetValue(m, out str);
-            return str;
+        public bool exists(Move m) {
+            bool flag;
+            moves.TryGetValue(m, out flag);
+            return flag;
         }
-
 
         public void readState(StreamReader sr) { //read from file 
             string dimensions = sr.ReadLine();
@@ -86,7 +85,6 @@ namespace DotsAndBoxes
             numRows = r; numColumns = c;
         }
 
-
         public StreamWriter writeState() {
             StreamWriter sw = new StreamWriter("output.txt");
             //TODO
@@ -95,7 +93,6 @@ namespace DotsAndBoxes
 
         public void addMove(Move m)
         {
-            moveString.Add(m, map(m));
             moves.Add(m, true);
         }
 
@@ -108,27 +105,22 @@ namespace DotsAndBoxes
 
         public bool getUp(int r, int c) {
             Move m = new Move(r, c, Move.DIRECTION.HORIZONTAL);
-            bool val;
-            moves.TryGetValue(m, out val);
-            return val;
+            return exists(m);
         }
+
         public bool getDown(int r, int c) {
             Move m = new Move(r+1, c, Move.DIRECTION.HORIZONTAL);
-            bool val;
-            moves.TryGetValue(m, out val);
-            return val;
+            return exists(m);
         }
+
         public bool getLeft(int r, int c) {
             Move m = new Move(r, c, Move.DIRECTION.VERTICAL);
-            bool val;
-            moves.TryGetValue(m, out val);
-            return val;
+            return exists(m);
         }
+
         public bool getRight(int r, int c) {
             Move m = new Move(r, c+1, Move.DIRECTION.VERTICAL);
-            bool val;
-            moves.TryGetValue(m, out val);
-            return val;
+            return exists(m);
         }
     }
 
