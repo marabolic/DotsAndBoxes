@@ -8,9 +8,19 @@ namespace etf.dotsandboxes.bm170614d
 {
     class Easy : Strategy
     {
-        public override void playMove()
+        public override Move playMove(GameState gameState)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < Form2.NumRows(); i++)
+                for (int j = 0; j < Form2.NumCols(); j++)
+                    if(gameState.countEdges(i,j,gameState.getCurrentPlayer().getColor()) == 3) {
+                        return gameState.fourthEdge(i, j, gameState.getCurrentPlayer().getColor());
+                    }
+
+            Random r = new Random();
+
+
+
+            return null;
         }
     }
 }

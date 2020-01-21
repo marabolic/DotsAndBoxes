@@ -14,12 +14,44 @@ namespace etf.dotsandboxes.bm170614d
         }
         int row, column;
         DIRECTION direction;
+        public enum SIDE
+        {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        }
+        public Move(int row, int col, SIDE s)
+        {
+            switch (s)
+            {
+                case SIDE.UP:
+                    this.row = row;
+                    this.column = col;
+                    this.direction = DIRECTION.HORIZONTAL;
+                    break;
+                case SIDE.DOWN:
+                    this.row = row + 1;
+                    this.column = col;
+                    this.direction = DIRECTION.HORIZONTAL;
+                    break;
+                case SIDE.LEFT:
+                    this.row = row;
+                    this.column = col;
+                    this.direction = DIRECTION.VERTICAL;
+                    break;
+                case SIDE.RIGHT:
+                    this.row = row;
+                    this.column = col + 1;
+                    this.direction = DIRECTION.VERTICAL;
+                    break;
+            }
+        }
 
         public Move(int row, int col, DIRECTION dir) {
             direction = dir;
             this.row = row;
             this.column = col;
-            
         }
 
         public override bool Equals(object obj)

@@ -8,9 +8,9 @@ namespace etf.dotsandboxes.bm170614d
 {
     class Medium : Strategy
     {
-        public override void playMove()
+        public override Move playMove(GameState gameState)
         {
-            throw new NotImplementedException();
+            return null; 
         }
     }
 }

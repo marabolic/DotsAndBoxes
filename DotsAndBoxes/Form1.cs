@@ -87,17 +87,26 @@ namespace etf.dotsandboxes.bm170614d
             active = true;
 
             int side = findClosestEdge(e.X, e.Y, e.Location.X, e.Location.X + boxSize, e.Location.Y, e.Location.Y + boxSize);
-            Move m;
-            if (side == e.Location.X || side == e.Location.X + boxSize)
+
+            //random
+            Move m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.VERTICAL); 
+           
+            //left
+            if (side == e.Location.X)
                 m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.VERTICAL);
-            else
-            {
+            //right
+            if (side == e.Location.X + boxSize)
+                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.VERTICAL);
+            //up
+            if (side ==  e.Location.Y)
                 m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.HORIZONTAL);
-            }
+            //down
+            if (side == e.Location.Y+boxSize)
+                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.HORIZONTAL);
+
             game.getGameState().getCurrentPlayer().setCurrentMove(m);
             dgv.Update();
         }
-
 
         private void Timer1_Tick(object sender, EventArgs e) {
             Move move = game.getGameState().getCurrentPlayer().getCurrentMove();
@@ -106,9 +115,44 @@ namespace etf.dotsandboxes.bm170614d
                 //todo
                 game.getGameState().addMove(move, color);
                 game.getGameState().getCurrentPlayer().setCurrentMove(null);
-            }
+            } 
             dgv.Update();
         }
+
+        private void DataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            int[] sides = new int[4];
+            sides[0] = e.X;
+            sides[1] = dgv[e.ColumnIndex, e.RowIndex].Size.Width - e.X;
+            sides[2] = e.Y;
+            sides[3] = dgv[e.ColumnIndex, e.RowIndex].Size.Height - e.Y;
+            int minIndex = Array.IndexOf(sides, sides.Min());
+            Move m;
+            switch (minIndex)
+            {
+                case 0:
+                    m = new Move(e.RowIndex, e.ColumnIndex, bm170614d.Move.SIDE.LEFT);
+                    break;
+                case 1:
+                    m = new Move(e.RowIndex, e.ColumnIndex, bm170614d.Move.SIDE.RIGHT);
+                    break;
+                case 2:
+                    m = new Move(e.RowIndex, e.ColumnIndex, bm170614d.Move.SIDE.UP);
+                    break;
+                case 3:
+                    m = new Move(e.RowIndex, e.ColumnIndex, bm170614d.Move.SIDE.DOWN);
+                    break;
+                default:
+                    m = null;
+                    break;
+            }
+            Console.WriteLine(GameState.map(m));
+            game.getGameState().getCurrentPlayer().setCurrentMove(m);
+            dgv.Update();
+        }
+
+
+
 
         //DRAWING
 
@@ -116,6 +160,7 @@ namespace etf.dotsandboxes.bm170614d
         {
             int xLeft = e.CellBounds.X + move, yUp = e.CellBounds.Y + move,
                 xRight = e.CellBounds.X + boxSize + move, yDown = e.CellBounds.Y + boxSize + move;
+            
 
             if (!clicked)
             {
@@ -153,41 +198,6 @@ namespace etf.dotsandboxes.bm170614d
                     }
                     else { e.Graphics.DrawLine(new Pen(Color.Gray), xRight, yUp, xRight, yDown); }
                 }
-
-                //    char side = findMin(currX, currY, xLeft, xRight, yUp, yDown);
-                //    //richTextBox1.Text += side.ToString() + "\n"; 
-                //    Pen p;
-                //    if (game.getPlayer1().isMyMove())  {
-                //        p = new Pen(Color.Blue);
-                //        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
-                //        {
-                //            game.getPlayer1().setMyTurn(true);
-                //            game.getPlayer2().setMyTurn(false);
-                //        }
-                //        else
-                //        {
-                //            game.getPlayer1().setMyTurn(false);
-                //            game.getPlayer2().setMyTurn(true);
-                //        }
-                //    }
-                //    else {
-                //        p = new Pen(Color.DarkRed);
-                //        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
-                //        {
-                //            game.getPlayer1().setMyTurn(false);
-                //            game.getPlayer2().setMyTurn(true);
-                //        }
-                //        else
-                //        {
-                //            game.getPlayer1().setMyTurn(true);
-                //            game.getPlayer2().setMyTurn(false);
-                //        }
-
-                //    }
-                //    drawColouredLine(side, e, p, xLeft, xRight, yUp, yDown);
-                //}
-                //active = false;
-
             }
             e.Handled = true;
         }
@@ -301,11 +311,8 @@ namespace etf.dotsandboxes.bm170614d
             }
         }
 
+      
 
-
-        //MENU ITEMS
-
-       
 
         //ADDITIONAL METHODS
 

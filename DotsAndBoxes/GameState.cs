@@ -16,11 +16,13 @@ namespace etf.dotsandboxes.bm170614d
         static int numColumns;
         Player currPlayer;
         Game game;
+        int numMoves;
 
         public GameState(Game game)
         {
             this.game = game;
             currPlayer = game.getPlayer1();
+            numMoves = 0;
         }
 
         //MAPPING
@@ -101,6 +103,13 @@ namespace etf.dotsandboxes.bm170614d
 
         //SET GET
 
+        public Dictionary<Move, Color> getMoves()
+        {
+            return moves;
+        }
+
+        public int movesSize() { return numMoves; }
+
         public void setRowsAndColumns(int r, int c) {
             numRows = r; numColumns = c;
         }
@@ -139,6 +148,56 @@ namespace etf.dotsandboxes.bm170614d
         {
             Console.WriteLine("get: " + map(m));
             return moves.TryGetValue(m, out color);
+        }
+
+        public bool get(int r, int c, int direction, Color color)
+        {
+            switch (direction)
+            {
+                case 0:
+                    return getUp(r, c, out color);
+                    break;
+                case 1:
+                    return getRight(r, c, out color);
+                    break;
+                case 2:
+                    return getDown(r, c, out color);
+                    break;
+                case 3:
+                    return getLeft(r, c, out color);
+                    break;
+                default:
+                    return false;
+            }
+        }
+
+        public Move fourthEdge(int r, int c, Color col)
+        {
+            int ret = 0;
+            Move m;
+            for (int i = 0; i < 4; i++) {
+                if (!get(r, c, i, col)) ret = i;
+            }
+            switch (ret)
+            {
+                case 0: m = new Move(r, c, Move.DIRECTION.HORIZONTAL); break;
+                case 1: m = new Move(r, c + 1, Move.DIRECTION.VERTICAL); break;
+                case 2: m = new Move(r + 1, c, Move.DIRECTION.HORIZONTAL); break;
+                case 3: m = new Move(r, c, Move.DIRECTION.VERTICAL); break;
+                default: return null;
+
+            }
+            return m;
+        }
+
+        public int countEdges(int r, int c, Color col)
+        {
+            int cnt = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (get(r, c, i, col)) cnt++;
+            }
+            return cnt;
         }
 
         public bool makesSquare(int r, int c, out Color color) {
