@@ -22,6 +22,17 @@ namespace etf.dotsandboxes.bm170614d
             
         }
 
+        public override bool Equals(object obj)
+        {
+            Move m = (Move)obj;
+            return m.row == row && m.column == column && direction == m.direction;
+        }
+
+        public override int GetHashCode()
+        {
+            return row * 100 + column * 10 + (int)direction;
+        }
+
         public DIRECTION getDirection() { return direction; }
         public int getRow() { return row; }
         public int getColumn() { return column; }

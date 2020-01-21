@@ -69,12 +69,11 @@ namespace etf.dotsandboxes.bm170614d
 
         public void Form1_Load(object sender, EventArgs e)
         {
-            game = new Game();
             numOfColumns = Form2.NumCols();
             numOfRows = Form2.NumRows();
             dgv = dataGridView1;
             setGrid(dgv);
-
+            timer1.Start();
         }
 
 
@@ -87,13 +86,16 @@ namespace etf.dotsandboxes.bm170614d
             clicked = true;
             active = true;
 
-
-            Move m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.HORIZONTAL);
-           
-            //baca null peder
+            int side = findClosestEdge(e.X, e.Y, e.Location.X, e.Location.X + boxSize, e.Location.Y, e.Location.Y + boxSize);
+            Move m;
+            if (side == e.Location.X || side == e.Location.X + boxSize)
+                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.VERTICAL);
+            else
+            {
+                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.HORIZONTAL);
+            }
             game.getGameState().getCurrentPlayer().setCurrentMove(m);
             dgv.Update();
-
         }
 
 
@@ -303,7 +305,7 @@ namespace etf.dotsandboxes.bm170614d
 
         //MENU ITEMS
 
-      
+       
 
         //ADDITIONAL METHODS
 
@@ -311,29 +313,29 @@ namespace etf.dotsandboxes.bm170614d
 
         private int convertCoordY() { return currX / boxSize; }
 
-        private char findClosestEdge(int x, int y, int l, int r, int u, int d)
+        private int findClosestEdge(int x, int y, int l, int r, int u, int d)
         {
             int min;
-            char side;
+            int side;
             if (r - x < y - u)
             {
                 min = r - x;
-                side = 'r';
+                side = r;
             }
             else
             {
                 min = y - u;
-                side = 'u';
+                side = u;
             }
             if (min > d - y)
             {
                 min = d - y;
-                side = 'd';
+                side = d;
             }
             if (min > x - l)
             {
                 min = x - l;
-                side = 'l';
+                side = l;
             }
 
             return side;

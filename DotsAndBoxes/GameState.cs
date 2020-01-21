@@ -11,7 +11,7 @@ namespace etf.dotsandboxes.bm170614d
     public class GameState {
 
         public static Dictionary<Move, Color> moves = new Dictionary<Move, Color>();
-      
+        
         static int numRows;
         static int numColumns;
         Player currPlayer;
@@ -118,7 +118,11 @@ namespace etf.dotsandboxes.bm170614d
 
         public void addMove(Move m, Color color)
         {
-            moves.Add(m, color);
+            if (!exists(m, out color))
+            {
+                moves.Add(m, color);
+                Console.WriteLine("put: " + map(m));
+            }
         }
 
 
@@ -133,6 +137,7 @@ namespace etf.dotsandboxes.bm170614d
 
         public bool exists(Move m, out Color color)
         {
+            Console.WriteLine("get: " + map(m));
             return moves.TryGetValue(m, out color);
         }
 
