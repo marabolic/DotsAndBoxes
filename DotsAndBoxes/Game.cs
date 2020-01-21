@@ -45,9 +45,6 @@ namespace etf.dotsandboxes.bm170614d
             return s; 
         }
 
-   
-        
-        
         public Player getPlayer1() { return player1; }
         public Player getPlayer2() { return player2; }
        

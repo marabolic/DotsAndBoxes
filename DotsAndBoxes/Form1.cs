@@ -26,7 +26,7 @@ namespace etf.dotsandboxes.bm170614d
       
         int currX, currY;
         public static Game game;
-        bool clicked = false, active = false;
+        bool clicked = false;
 
 
 
@@ -83,12 +83,11 @@ namespace etf.dotsandboxes.bm170614d
        
 
         private void Timer1_Tick(object sender, EventArgs e) {
-            Move move = game.getGameState().getCurrentPlayer().getCurrentMove();
+            Move move = game.getGameState().getCurrentPlayer().makeMove(game.getGameState());
             Color color = game.getGameState().getCurrentPlayer().getColor();
             if (move != null) {
                 //todo
                 game.getGameState().addMove(move, color);
-                game.getGameState().getCurrentPlayer().setCurrentMove(null);
             } 
             dgv.Update();
         }
@@ -122,7 +121,9 @@ namespace etf.dotsandboxes.bm170614d
             }
             Console.WriteLine(GameState.map(m));
             game.getGameState().getCurrentPlayer().setCurrentMove(m);
-            dgv.Update();
+            clicked = true;
+            timer1.Start();
+           
         }
 
 
@@ -134,42 +135,44 @@ namespace etf.dotsandboxes.bm170614d
             int xLeft = e.CellBounds.X + move, yUp = e.CellBounds.Y + move,
                 xRight = e.CellBounds.X + boxSize + move, yDown = e.CellBounds.Y + boxSize + move;
             
-
-            if (!clicked)
-            {
+            if (!clicked) {
                 drawDefaultLines(e, xLeft, xRight, yUp, yDown);
                 Brush b = new SolidBrush(Color.Gray);
                 drawDots(e, b, xLeft, xRight, yUp, yDown);
             }
-            else
-            {
-                if (active && game != null)
+            else {
+                if (game != null)
                 {
                     Color color;
                     //top line
-                    if (!game.getGameState().getUp(e.RowIndex, e.ColumnIndex, color))
-                    {
+                    if (game.getGameState().getUp(e.RowIndex, e.ColumnIndex, out color)) { 
                         e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xRight, yUp);
                     }
                     
                     //left line
-                    if (game.getGameState().getLeft(e.RowIndex, e.ColumnIndex, color))
+                    if (game.getGameState().getLeft(e.RowIndex, e.ColumnIndex, out color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xLeft, yDown);
                     }
                     
                     //down
-                    if (game.getGameState().getDown(e.RowIndex, e.ColumnIndex,  color))
+                    if (game.getGameState().getDown(e.RowIndex, e.ColumnIndex, out color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xLeft, yDown, xRight, yDown);
                     }
                     
                     //right
-                    if (game.getGameState().getRight(e.RowIndex, e.ColumnIndex,  color))
+                    if (game.getGameState().getRight(e.RowIndex, e.ColumnIndex, out color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xRight, yUp, xRight, yDown);
+                    } 
+
+
+                    if (game.getGameState().countEdges(e.RowIndex,e.ColumnIndex, color) == 4)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(color), xLeft, yUp, xRight-xLeft , yDown-yUp);
                     }
-                    
+
                 }
             }
             e.Handled = true;

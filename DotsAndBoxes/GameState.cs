@@ -12,8 +12,8 @@ namespace etf.dotsandboxes.bm170614d
         
         public class Elem
         {
-            Move move = null;
-            Color color = Color.Gray;
+            public Move move = null;
+            public Color color = Color.Gray;
             public Elem(Move m, Color c) { move = m; color = c; }
 
             public override bool Equals(object obj)
@@ -26,6 +26,8 @@ namespace etf.dotsandboxes.bm170614d
         }
 
         public static List<Elem> moves = new List<Elem>();
+
+        public int[,] boxes = new int[10,10];
         
         static int numRows;
         static int numColumns;
@@ -33,11 +35,23 @@ namespace etf.dotsandboxes.bm170614d
         Game game;
         int numMoves;
 
+
         public GameState(Game game)
         {
             this.game = game;
             currPlayer = game.getPlayer1();
             numMoves = 0;
+        }
+
+        public GameState(GameState gs)
+        {
+            for (int i = 0; i < gs.getMoves().Count; i++)
+            {
+                moves.Add(gs.getMoves()[i]);
+            }
+            currPlayer = gs.currPlayer;
+            game = gs.game;
+
         }
 
         //MAPPING
@@ -85,7 +99,6 @@ namespace etf.dotsandboxes.bm170614d
         }
 
 
-
         //READ WRITE
 
         public void readState(StreamReader sr) { //read from file 
@@ -99,11 +112,8 @@ namespace etf.dotsandboxes.bm170614d
                 string value = sr.ReadLine();
                 Move m = map(value);
                 moves.Add(new Elem(m,color));
-                if (game.getGameState().makesSquare(r, c, color))
-                {
-                    game.getGameState().changePlayer();
-                    color = currPlayer.getColor();
-                }
+                color = currPlayer.getColor();
+                
             }
         }
 
@@ -113,8 +123,6 @@ namespace etf.dotsandboxes.bm170614d
             //TODO
             return sw;
         }
-
-
 
         //SET GET
 
@@ -137,16 +145,79 @@ namespace etf.dotsandboxes.bm170614d
             else currPlayer = game.getPlayer1();
         }
 
+        public int score(Player p)
+        {
+            //todo
+            return 1;
+        }
+
 
         // MOVES HASH OPERATIONS
 
+
+        public void addBox(int i, int j)
+        {
+            if (getCurrentPlayer() == game.getPlayer1())
+                boxes[i, j] = 1;
+            else boxes[i, j] = 2;
+        }
+
         public void addMove(Move m, Color color)
         {
-            if (!exists(m, color))
+            Color colo;
+            if (!exists(m, out colo))
             {
-                
                 moves.Add(new Elem(m, color));
-                Console.WriteLine("put: " + map(m));
+                int dir = (int)m.getDirection();
+                int row = m.getRow();
+                int col = m.getColumn();
+                bool dontChange = false;
+                if (dir == 0)
+                {
+                    if (row < Form2.NumRows())
+                    {
+                        if (countEdges(row, col, color) == 4) {
+                            addBox(row, col);
+                            dontChange = true;
+                        }
+                        
+                    }
+                    if (row > 0)
+                    {
+                        if (countEdges(row - 1, col, color) == 4)
+                        {
+                            addBox(row-1, col);
+                            dontChange = true;
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (col < Form2.NumCols())
+                    {
+                        if (countEdges(row, col, color) == 4)
+                        {
+                            addBox(row, col);
+                            dontChange = true;
+                        }
+                    }
+                    if (col > 0)
+                    {
+                        if (countEdges(row, col - 1, color) == 4)
+                        {
+                            addBox(row, col - 1);
+                            dontChange = true;
+
+                        }
+                    }
+                }
+
+                if (!dontChange)
+                {
+                    changePlayer();
+                }
+
             }
         }
 
@@ -156,18 +227,20 @@ namespace etf.dotsandboxes.bm170614d
 
         public bool gameOver()
         {
-            //TODO
+            
             return false;
         }
 
-        public bool exists(Move m, Color color)
+        public bool exists(Move m, out Color color)
         {
-            // Console.WriteLine("get: " + map(m));
-            Elem e = new Elem(m, color);
             for (int i = 0; i < moves.Count; i++) {
-                if (e.Equals(moves[i]))
+                if (m.Equals(moves[i].move))
+                {
+                    color = moves[i].color;
                     return true;
+                }
             }
+            color = Color.Gray;
             return false;
         }
 
@@ -176,16 +249,16 @@ namespace etf.dotsandboxes.bm170614d
             switch (direction)
             {
                 case 0:
-                    return getUp(r, c, color);
+                    return getUp(r, c, out color);
                     break;
                 case 1:
-                    return getRight(r, c, color);
+                    return getRight(r, c, out color);
                     break;
                 case 2:
-                    return getDown(r, c, color);
+                    return getDown(r, c,out color);
                     break;
                 case 3:
-                    return getLeft(r, c, color);
+                    return getLeft(r, c, out color);
                     break;
                 default:
                     return false;
@@ -222,30 +295,30 @@ namespace etf.dotsandboxes.bm170614d
         }
 
         public bool makesSquare(int r, int c, Color color) {
-            if (getUp(r,c, color) && getDown(r, c, color) && getLeft(r, c, color) && getRight(r, c, color)) {
+            if (getUp(r,c,out color) && getDown(r, c, out color) && getLeft(r, c, out color) && getRight(r, c, out color)) {
                 return true;
             }
             return false;
         }
 
-        public bool getUp(int r, int c, Color color) {
+        public bool getUp(int r, int c, out Color color) {
             Move m = new Move(r, c, Move.SIDE.UP);
-            return exists(m, color);
+            return exists(m, out color);
         }
 
-        public bool getDown(int r, int c,  Color color) {
+        public bool getDown(int r, int c, out Color color) {
             Move m = new Move(r, c, Move.SIDE.DOWN);
-            return exists(m, color);
+            return exists(m, out color);
         }
 
-        public bool getLeft(int r, int c, Color color) {
+        public bool getLeft(int r, int c, out Color color) {
             Move m = new Move(r, c, Move.SIDE.LEFT);
-            return exists(m, color);
+            return exists(m, out color);
         }
 
-        public bool getRight(int r, int c, Color color) {
+        public bool getRight(int r, int c, out Color color) {
             Move m = new Move(r, c, Move.SIDE.RIGHT);
-            return exists(m, color);
+            return exists(m, out color);
         }
     }
 

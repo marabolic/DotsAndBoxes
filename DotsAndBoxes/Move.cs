@@ -68,7 +68,7 @@ namespace etf.dotsandboxes.bm170614d
         public override bool Equals(object obj)
         {
             Move m = (Move)obj;
-            return m.row == row && m.column == column && direction == m.direction;
+            return m.row == this.row && m.column == this.column && this.direction == m.direction;
         }
 
         public override int GetHashCode()

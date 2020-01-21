@@ -48,11 +48,13 @@ namespace etf.dotsandboxes.bm170614d
             this.easyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mediumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.treeDepthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.columnsNumUPD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowsNumUPD)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // columnsLabel
@@ -118,7 +120,7 @@ namespace etf.dotsandboxes.bm170614d
             this.computerHumanToolStripMenuItem,
             this.computerComputerToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
             this.newToolStripMenuItem.Text = "New";
             // 
             // humanHumanToolStripMenuItem
@@ -154,34 +156,33 @@ namespace etf.dotsandboxes.bm170614d
             // stepByStepToolStripMenuItem
             // 
             this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
             this.stepByStepToolStripMenuItem.Text = "Step by step";
             this.stepByStepToolStripMenuItem.Click += new System.EventHandler(this.StepByStepToolStripMenuItem_Click);
             // 
             // fInalToolStripMenuItem
             // 
             this.fInalToolStripMenuItem.Name = "fInalToolStripMenuItem";
-            this.fInalToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.fInalToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
             this.fInalToolStripMenuItem.Text = "Final";
             this.fInalToolStripMenuItem.Click += new System.EventHandler(this.FInalToolStripMenuItem_Click_1);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.difficultyToolStripMenuItem,
-            this.treeDepthToolStripMenuItem});
+            this.difficultyToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(58, 29);
             this.editToolStripMenuItem.Text = "Edit";
@@ -199,34 +200,47 @@ namespace etf.dotsandboxes.bm170614d
             // easyToolStripMenuItem
             // 
             this.easyToolStripMenuItem.Name = "easyToolStripMenuItem";
-            this.easyToolStripMenuItem.Size = new System.Drawing.Size(180, 34);
+            this.easyToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.easyToolStripMenuItem.Text = "Easy";
             // 
             // mediumToolStripMenuItem
             // 
             this.mediumToolStripMenuItem.Name = "mediumToolStripMenuItem";
-            this.mediumToolStripMenuItem.Size = new System.Drawing.Size(180, 34);
+            this.mediumToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.mediumToolStripMenuItem.Text = "Medium";
             // 
             // hardToolStripMenuItem
             // 
             this.hardToolStripMenuItem.Name = "hardToolStripMenuItem";
-            this.hardToolStripMenuItem.Size = new System.Drawing.Size(180, 34);
+            this.hardToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.hardToolStripMenuItem.Text = "Hard";
-            // 
-            // treeDepthToolStripMenuItem
-            // 
-            this.treeDepthToolStripMenuItem.Name = "treeDepthToolStripMenuItem";
-            this.treeDepthToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.treeDepthToolStripMenuItem.Text = "Tree depth";
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(207, 200);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 26);
+            this.numericUpDown1.TabIndex = 12;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.NumericUpDown1_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(128, 200);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 20);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Depth";
+            // 
             // Form2
             // 
             this.ClientSize = new System.Drawing.Size(426, 336);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.columnsLabel);
             this.Controls.Add(this.rowsLabel);
             this.Controls.Add(this.columnsNumUPD);
@@ -239,6 +253,7 @@ namespace etf.dotsandboxes.bm170614d
             ((System.ComponentModel.ISupportInitialize)(this.rowsNumUPD)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -258,7 +273,6 @@ namespace etf.dotsandboxes.bm170614d
         private System.Windows.Forms.ToolStripMenuItem difficultyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem easyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mediumToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem treeDepthToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem humanHumanToolStripMenuItem;
@@ -268,5 +282,7 @@ namespace etf.dotsandboxes.bm170614d
         private System.Windows.Forms.ToolStripMenuItem stepByStepToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fInalToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label1;
     }
 }

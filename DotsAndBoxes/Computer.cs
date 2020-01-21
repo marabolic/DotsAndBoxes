@@ -32,9 +32,9 @@ namespace etf.dotsandboxes.bm170614d
             }
         }
 
-        public override void makeMove(Move move)
+        public override Move makeMove(GameState gameState)
         {
-            throw new NotImplementedException();
+           return strategy.playMove(gameState);
         }
 
         public override bool isHuman()

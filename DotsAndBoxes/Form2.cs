@@ -13,6 +13,7 @@ namespace etf.dotsandboxes.bm170614d
         private Label rowsLabel;
         private NumericUpDown columnsNumUPD;
         private NumericUpDown rowsNumUPD;
+        public static int depth;
 
         static int numOfRows, numOfColumns;
         Computer.STRATEGY difficulty;
@@ -32,14 +33,13 @@ namespace etf.dotsandboxes.bm170614d
             return numOfColumns;
         }
 
-
-
         //MENU ITEMS
 
         private void menuItemClick()
         {
             numOfColumns = Convert.ToInt32(columnsNumUPD.Value);
             numOfRows = Convert.ToInt32(rowsNumUPD.Value);
+            depth = Convert.ToInt32(numericUpDown1.Value);
             form1 = new Form1();
             form1.ShowDialog();
         }
@@ -109,8 +109,10 @@ namespace etf.dotsandboxes.bm170614d
             openFileDialog1.ShowDialog();
         }
 
+        private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
 
-       
+        }
 
         private void Form2_Load(object sender, EventArgs e)
         {

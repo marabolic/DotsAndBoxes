@@ -8,6 +8,7 @@ namespace etf.dotsandboxes.bm170614d
 {
     abstract class Strategy
     {
+        public Player myPlayer;
         public abstract Move playMove(GameState gameState);
     }
 }

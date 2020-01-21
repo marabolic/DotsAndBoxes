@@ -11,7 +11,8 @@ namespace etf.dotsandboxes.bm170614d
     {
         Color color; //red second, blue first player
         bool myTurn = false;
-        Move currentMove;
+        protected Move currentMove;
+        public int score;
 
         public Player() { currentMove = null; }
 
@@ -29,7 +30,7 @@ namespace etf.dotsandboxes.bm170614d
 
         public void setMyTurn(bool myTurn) { this.myTurn = myTurn; }
 
-        public abstract void makeMove(Move move);
+        public abstract Move makeMove(GameState gameState);
 
        
     }

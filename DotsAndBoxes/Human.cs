@@ -13,8 +13,10 @@ namespace etf.dotsandboxes.bm170614d
             
         }
 
-        public override void makeMove(Move move) {
-           
+        public override Move makeMove(GameState gameState) {
+            Move temp = currentMove;
+            currentMove = null;
+            return temp;
         }
 
         public override bool isHuman() { return true; }
