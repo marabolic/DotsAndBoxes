@@ -11,10 +11,19 @@ namespace etf.dotsandboxes.bm170614d
     {
         Color color; //red second, blue first player
         bool myTurn = false;
+        Move currentMove;
+
+        public Player() { currentMove = null; }
 
         public void setColor(Color color) { this.color = color; }
 
+        public void setCurrentMove(Move currMove) { currentMove = currMove; }
+
+        public Move getCurrentMove() { return currentMove; }
+
         public bool isMyMove() { return myTurn; }
+
+        public abstract bool isHuman();
 
         public void setMyTurn(bool myTurn) { this.myTurn = myTurn; }
 

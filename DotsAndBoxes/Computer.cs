@@ -36,5 +36,10 @@ namespace etf.dotsandboxes.bm170614d
         {
             throw new NotImplementedException();
         }
+
+        public override bool isHuman()
+        {
+            return false;
+        }
     }
 }

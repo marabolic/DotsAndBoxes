@@ -61,6 +61,7 @@ namespace etf.dotsandboxes.bm170614d
             return m;
         }
 
+
         public bool exists(Move m) {
             bool flag;
             moves.TryGetValue(m, out flag);
@@ -95,6 +96,14 @@ namespace etf.dotsandboxes.bm170614d
         {
             moves.Add(m, true);
         }
+
+        public bool gameOver()
+        {
+            //TODO
+            return false;
+        }
+
+
 
         public bool makesSquare(int r, int c) {
             if (getUp(r,c) && getDown(r, c) && getLeft(r, c) && getRight(r, c)) {

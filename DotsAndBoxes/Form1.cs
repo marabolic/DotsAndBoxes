@@ -28,7 +28,10 @@ namespace etf.dotsandboxes.bm170614d
         Computer.STRATEGY difficulty;
         bool clicked = false, active = false;
 
+
+        
         //LOADING FORM
+
         void setGrid(DataGridView dgv) { 
             dgv.BackgroundColor = Color.White;
             dgv.RowHeadersVisible = false;
@@ -64,7 +67,6 @@ namespace etf.dotsandboxes.bm170614d
         }
 
         public void Form1_Load(object sender, EventArgs e)  {
-            //showDimensionsChoice();
             numOfColumns = Form2.NumCols();
             numOfRows = Form2.NumRows();
             dgv = dataGridView1;
@@ -77,13 +79,24 @@ namespace etf.dotsandboxes.bm170614d
         //MOUSE EVENT
 
         private void DataGridView1_MouseClick(object sender, MouseEventArgs e) {
-            currX = e.X; currY = e. Y;
+            currX = e.X; currY = e.Y;
             clicked = true;
             active = true;
             dgv.Update(); 
 
         }
 
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (game.getPlayer1().isHuman())
+            {
+                if (game.getPlayer1().getCurrentMove() != null)
+                {
+                    //todo
+                    game.getPlayer1().setCurrentMove(convertCoordX(), convertCoordY(),);
+                }
+            }
+        }
 
 
         //DRAWING
@@ -197,25 +210,25 @@ namespace etf.dotsandboxes.bm170614d
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
                         //if
                         e.Graphics.DrawLine(p, xLeft, yUp + move, xLeft, yDown);
-                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.VERTICAL);
+                        drawMove(p, e, bm170614d.Move.DIRECTION.VERTICAL);
                     }
                     break;
                 case 'r':
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
                         e.Graphics.DrawLine(p, xRight, yUp + move, xRight, yDown);
-                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.VERTICAL);
+                        drawMove(p, e, bm170614d.Move.DIRECTION.VERTICAL);
                     } 
                     break;
                 case 'u':
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
                         e.Graphics.DrawLine(p, xLeft + move, yUp, xRight, yUp);
-                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.HORIZONTAL);
+                        drawMove(p, e, bm170614d.Move.DIRECTION.HORIZONTAL);
                     }
                     break;
                 case 'd':
                     if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()){
                         e.Graphics.DrawLine(p, xRight, yDown + move, xLeft, yDown);
-                        drawMove(p, e, DotsAndBoxes.Move.DIRECTION.HORIZONTAL);
+                        drawMove(p, e, bm170614d.Move.DIRECTION.HORIZONTAL);
                     }
                     break;
             }
@@ -288,6 +301,8 @@ namespace etf.dotsandboxes.bm170614d
         {
             game = new Game(new Computer(difficulty), new Computer(difficulty));
         }
+
+       
 
 
 
