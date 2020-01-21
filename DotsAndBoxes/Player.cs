@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace etf.dotsandboxes.bm170614d
 {
-    abstract class Player
+    public abstract class Player
     {
         Color color; //red second, blue first player
         bool myTurn = false;
@@ -16,6 +16,8 @@ namespace etf.dotsandboxes.bm170614d
         public Player() { currentMove = null; }
 
         public void setColor(Color color) { this.color = color; }
+
+        public Color getColor() { return color; }
 
         public void setCurrentMove(Move currMove) { currentMove = currMove; }
 

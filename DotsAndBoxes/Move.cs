@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace etf.dotsandboxes.bm170614d
 {
-    class Move
+    public class Move
     {
         public enum DIRECTION {
             HORIZONTAL = 0,

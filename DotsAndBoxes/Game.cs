@@ -8,13 +8,17 @@ using System.IO;
 
 namespace etf.dotsandboxes.bm170614d
 {
-    class Game 
+    public class Game 
     {
 
         Player player1;
         Player player2;
 
         GameState gameState;
+
+        public Game() {
+            
+        }
 
         public Game(Player player1, Player player2)
         {
@@ -23,35 +27,26 @@ namespace etf.dotsandboxes.bm170614d
             player1.setColor(Color.Blue);
             player2.setColor(Color.DarkRed);
             player1.setMyTurn(true);
-            gameState = new GameState();
+            gameState = new GameState(this);
         }
 
-        public void loadState(StreamReader sr)
-        {
+        public void setPlayer1(Player p) { player1 = p; player1.setColor(Color.Blue); player1.setMyTurn(true); }
+        public void setPlayer2(Player p) { player2 = p; player2.setColor(Color.DarkRed); }
+        public void setGameState() { gameState = new GameState(this); }
+
+        public void loadState(StreamReader sr) {
             gameState.readState(sr);
-
         }
 
-        public string map(Move m)
-        {
+        public GameState getGameState() { return gameState; }
+
+        public string map(Move m) {
             string s = GameState.map(m);
-            return s;
+            return s; 
         }
 
-        public void checkExists(Move m)
-        {
-            gameState.exists(m);
-        }
-
-        public bool makesSquare(int r, int c)
-        {
-            return gameState.makesSquare(r, c);
-        }
-
-        public void addMove(Move m)
-        {
-            gameState.addMove(m);
-        }
+   
+        
         
         public Player getPlayer1() { return player1; }
         public Player getPlayer2() { return player2; }

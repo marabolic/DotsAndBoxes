@@ -8,21 +8,16 @@ namespace etf.dotsandboxes.bm170614d
 {
     class Human : Player
     {
-        Human()
+        public Human()
         {
             
         }
 
-
-        public override void makeMove(Move move)
-        {
+        public override void makeMove(Move move) {
            
         }
 
-        public override bool isHuman()
-        {
-            return true;
-        }
+        public override bool isHuman() { return true; }
     }
 }
  

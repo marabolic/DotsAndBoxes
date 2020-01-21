@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using etf.dotsandboxes.bm170614d;
 
 
 namespace etf.dotsandboxes.bm170614d
@@ -19,36 +19,37 @@ namespace etf.dotsandboxes.bm170614d
             InitializeComponent();
         }
 
-        DataGridView dgv;  
+        DataGridView dgv;
         int numOfRows, numOfColumns;
         public int boxSize;
         private const int move = 4;
-        Game game;
+      
         int currX, currY;
-        Computer.STRATEGY difficulty;
+        public static Game game;
         bool clicked = false, active = false;
 
 
-        
+
         //LOADING FORM
 
-        void setGrid(DataGridView dgv) { 
+        void setGrid(DataGridView dgv)
+        {
             dgv.BackgroundColor = Color.White;
             dgv.RowHeadersVisible = false;
             dgv.ColumnHeadersVisible = false;
             dgv.RowCount = numOfRows;
             dgv.ColumnCount = numOfColumns;
             DoubleBuffered = true;
-           
+
             boxSize = 35;
             int num = Math.Max(numOfColumns, numOfRows);
 
-            dgv.Width = (num +1) * boxSize;
-            dgv.Height = (num +1) * boxSize;
-            
+            dgv.Width = (num + 1) * boxSize;
+            dgv.Height = (num + 1) * boxSize;
 
 
-            for (int i = 0; i < numOfRows; i++) 
+
+            for (int i = 0; i < numOfRows; i++)
             {
                 dgv.Rows[i].Height = boxSize;
             }
@@ -57,7 +58,7 @@ namespace etf.dotsandboxes.bm170614d
                 dgv.Columns[j].Width = boxSize;
             }
 
-            
+
             for (int i = 0; i < numOfRows; i++)
                 for (int j = 0; j < numOfColumns; j++)
                 {
@@ -66,38 +67,46 @@ namespace etf.dotsandboxes.bm170614d
             dgv.SetBounds(20, 20, dgv.Width, dgv.Height);
         }
 
-        public void Form1_Load(object sender, EventArgs e)  {
+        public void Form1_Load(object sender, EventArgs e)
+        {
+            game = new Game();
             numOfColumns = Form2.NumCols();
             numOfRows = Form2.NumRows();
             dgv = dataGridView1;
-            easyToolStripMenuItem.Checked = true;
             setGrid(dgv);
+
         }
 
 
 
         //MOUSE EVENT
 
-        private void DataGridView1_MouseClick(object sender, MouseEventArgs e) {
+        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
             currX = e.X; currY = e.Y;
             clicked = true;
             active = true;
-            dgv.Update(); 
+
+
+            Move m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.HORIZONTAL);
+           
+            //baca null peder
+            game.getGameState().getCurrentPlayer().setCurrentMove(m);
+            dgv.Update();
 
         }
 
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            if (game.getPlayer1().isHuman())
-            {
-                if (game.getPlayer1().getCurrentMove() != null)
-                {
-                    //todo
-                    game.getPlayer1().setCurrentMove(convertCoordX(), convertCoordY(),);
-                }
+
+        private void Timer1_Tick(object sender, EventArgs e) {
+            Move move = game.getGameState().getCurrentPlayer().getCurrentMove();
+            Color color = game.getGameState().getCurrentPlayer().getColor();
+            if (move != null) {
+                //todo
+                game.getGameState().addMove(move, color);
+                game.getGameState().getCurrentPlayer().setCurrentMove(null);
             }
+            dgv.Update();
         }
-
 
         //DRAWING
 
@@ -106,46 +115,77 @@ namespace etf.dotsandboxes.bm170614d
             int xLeft = e.CellBounds.X + move, yUp = e.CellBounds.Y + move,
                 xRight = e.CellBounds.X + boxSize + move, yDown = e.CellBounds.Y + boxSize + move;
 
-            if (!clicked) {
+            if (!clicked)
+            {
                 drawDefaultLines(e, xLeft, xRight, yUp, yDown);
                 Brush b = new SolidBrush(Color.Gray);
                 drawDots(e, b, xLeft, xRight, yUp, yDown);
             }
-            else {
-                if (active && game != null) {
-                    char side = findMin(currX, currY, xLeft, xRight, yUp, yDown);
-                    //richTextBox1.Text += side.ToString() + "\n"; 
-                    Pen p;
-                    if (game.getPlayer1().isMyMove())  {
-                        p = new Pen(Color.Blue);
-                        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
-                        {
-                            game.getPlayer1().setMyTurn(true);
-                            game.getPlayer2().setMyTurn(false);
-                        }
-                        else
-                        {
-                            game.getPlayer1().setMyTurn(false);
-                            game.getPlayer2().setMyTurn(true);
-                        }
+            else
+            {
+                if (active && game != null)
+                {
+                    Color color;
+                    //top line
+                    if (game.getGameState().getUp(e.RowIndex, e.ColumnIndex, out color))
+                    {
+                        e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xRight, yUp);
                     }
-                    else {
-                        p = new Pen(Color.DarkRed);
-                        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
-                        {
-                            game.getPlayer1().setMyTurn(false);
-                            game.getPlayer2().setMyTurn(true);
-                        }
-                        else
-                        {
-                            game.getPlayer1().setMyTurn(true);
-                            game.getPlayer2().setMyTurn(false);
-                        }
-
+                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xLeft, yUp, xRight, yUp); }
+                    //left line
+                    if (game.getGameState().getLeft(e.RowIndex, e.ColumnIndex, out color))
+                    {
+                        e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xLeft, yDown);
                     }
-                    drawColouredLine(side, e, p, xLeft, xRight, yUp, yDown);
+                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xLeft, yUp, xLeft, yDown); }
+                    //down
+                    if (game.getGameState().getDown(e.RowIndex, e.ColumnIndex, out color))
+                    {
+                        e.Graphics.DrawLine(new Pen(color), xLeft, yDown, xRight, yDown);
+                    }
+                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xLeft, yDown, xRight, yDown); }
+                    //right
+                    if (game.getGameState().getRight(e.RowIndex, e.ColumnIndex, out color))
+                    {
+                        e.Graphics.DrawLine(new Pen(color), xRight, yUp, xRight, yDown);
+                    }
+                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xRight, yUp, xRight, yDown); }
                 }
-                active = false;
+
+                //    char side = findMin(currX, currY, xLeft, xRight, yUp, yDown);
+                //    //richTextBox1.Text += side.ToString() + "\n"; 
+                //    Pen p;
+                //    if (game.getPlayer1().isMyMove())  {
+                //        p = new Pen(Color.Blue);
+                //        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
+                //        {
+                //            game.getPlayer1().setMyTurn(true);
+                //            game.getPlayer2().setMyTurn(false);
+                //        }
+                //        else
+                //        {
+                //            game.getPlayer1().setMyTurn(false);
+                //            game.getPlayer2().setMyTurn(true);
+                //        }
+                //    }
+                //    else {
+                //        p = new Pen(Color.DarkRed);
+                //        if (game.makesSquare(e.RowIndex, e.ColumnIndex))
+                //        {
+                //            game.getPlayer1().setMyTurn(false);
+                //            game.getPlayer2().setMyTurn(true);
+                //        }
+                //        else
+                //        {
+                //            game.getPlayer1().setMyTurn(true);
+                //            game.getPlayer2().setMyTurn(false);
+                //        }
+
+                //    }
+                //    drawColouredLine(side, e, p, xLeft, xRight, yUp, yDown);
+                //}
+                //active = false;
+
             }
             e.Handled = true;
         }
@@ -178,7 +218,8 @@ namespace etf.dotsandboxes.bm170614d
             }
         }
 
-        public void drawDefaultLines(DataGridViewCellPaintingEventArgs e, int xLeft, int xRight, int yUp, int yDown) {
+        public void drawDefaultLines(DataGridViewCellPaintingEventArgs e, int xLeft, int xRight, int yUp, int yDown)
+        {
             using (
                 Brush gridBrush = new SolidBrush(this.dataGridView1.GridColor),
                 backColorBrush = new SolidBrush(e.CellStyle.BackColor))
@@ -204,29 +245,35 @@ namespace etf.dotsandboxes.bm170614d
             }
         }
 
-        public void drawColouredLine(int side, DataGridViewCellPaintingEventArgs e, Pen p, int xLeft, int xRight, int yUp, int yDown) {
-            switch (side){
+        public void drawColouredLine(int side, DataGridViewCellPaintingEventArgs e, Pen p, int xLeft, int xRight, int yUp, int yDown)
+        {
+            switch (side)
+            {
                 case 'l':
-                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
+                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY())
+                    {
                         //if
                         e.Graphics.DrawLine(p, xLeft, yUp + move, xLeft, yDown);
                         drawMove(p, e, bm170614d.Move.DIRECTION.VERTICAL);
                     }
                     break;
                 case 'r':
-                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
+                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY())
+                    {
                         e.Graphics.DrawLine(p, xRight, yUp + move, xRight, yDown);
                         drawMove(p, e, bm170614d.Move.DIRECTION.VERTICAL);
-                    } 
+                    }
                     break;
                 case 'u':
-                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()) {
+                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY())
+                    {
                         e.Graphics.DrawLine(p, xLeft + move, yUp, xRight, yUp);
                         drawMove(p, e, bm170614d.Move.DIRECTION.HORIZONTAL);
                     }
                     break;
                 case 'd':
-                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY()){
+                    if (e.RowIndex == convertCoordX() && e.ColumnIndex == convertCoordY())
+                    {
                         e.Graphics.DrawLine(p, xRight, yDown + move, xLeft, yDown);
                         drawMove(p, e, bm170614d.Move.DIRECTION.HORIZONTAL);
                     }
@@ -240,80 +287,31 @@ namespace etf.dotsandboxes.bm170614d
             {
                 Move m = new Move(e.RowIndex, e.ColumnIndex, direction);
                 //game.getPlayer1().makeMove(m);
-                game.addMove(m);
+                game.getGameState().addMove(m,p.Color);
                 richTextBox1.Text += game.map(m) + "\n";
             }
             else
             {
                 Move m = new Move(e.RowIndex, e.ColumnIndex, direction);
-                game.addMove(m);
+                game.getGameState().addMove(m, p.Color);
                 //game.getPlayer2().makeMove(m);
                 richTextBox1.Text += game.map(m) + "\n";
             }
         }
-        
+
 
 
         //MENU ITEMS
 
-        private void EasyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            difficulty = Computer.STRATEGY.EASY;
-            easyToolStripMenuItem.Checked = true;
-            mediumToolStripMenuItem.Checked = false;
-            hardToolStripMenuItem.Checked = false;
-        }
-
-        private void MediumToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            difficulty = Computer.STRATEGY.MEDIUM;
-            easyToolStripMenuItem.Checked = false;
-            mediumToolStripMenuItem.Checked = true;
-            hardToolStripMenuItem.Checked = false;
-        }
-
-        private void HardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            difficulty = Computer.STRATEGY.HARD;
-            easyToolStripMenuItem.Checked = false;
-            mediumToolStripMenuItem.Checked = false;
-            hardToolStripMenuItem.Checked = true;
-        }
-
-        private void HumanHumanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            game = new Game(new Human(), new Human());
-            
-        }
-
-        private void HumanComputerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            game = new Game(new Human(), new Computer(difficulty));
-        }
-
-        private void ComputerHumanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            game = new Game(new Computer(difficulty), new Human());
-        }
-
-        private void ComputerComputerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            game = new Game(new Computer(difficulty), new Computer(difficulty));
-        }
-
-       
-
-
-
+      
 
         //ADDITIONAL METHODS
 
         private int convertCoordX() { return currY / boxSize; }
 
         private int convertCoordY() { return currX / boxSize; }
-     
-        private char findMin(int x, int y, int l, int r, int u, int d)
+
+        private char findClosestEdge(int x, int y, int l, int r, int u, int d)
         {
             int min;
             char side;
