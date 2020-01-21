@@ -9,8 +9,23 @@ using System.Drawing;
 namespace etf.dotsandboxes.bm170614d
 {
     public class GameState {
+        
+        public class Elem
+        {
+            Move move = null;
+            Color color = Color.Gray;
+            public Elem(Move m, Color c) { move = m; color = c; }
 
-        public static Dictionary<Move, Color> moves = new Dictionary<Move, Color>();
+            public override bool Equals(object obj)
+            {
+                Elem e = (Elem)obj;
+                if (e.color.Equals(this.color) && e.move.Equals(this.move))
+                    return true;
+                return false;
+            }
+        }
+
+        public static List<Elem> moves = new List<Elem>();
         
         static int numRows;
         static int numColumns;
@@ -83,8 +98,8 @@ namespace etf.dotsandboxes.bm170614d
             while (!sr.EndOfStream)  {
                 string value = sr.ReadLine();
                 Move m = map(value);
-                moves.Add(m,color);
-                if (game.getGameState().makesSquare(r, c, out color))
+                moves.Add(new Elem(m,color));
+                if (game.getGameState().makesSquare(r, c, color))
                 {
                     game.getGameState().changePlayer();
                     color = currPlayer.getColor();
@@ -103,7 +118,7 @@ namespace etf.dotsandboxes.bm170614d
 
         //SET GET
 
-        public Dictionary<Move, Color> getMoves()
+        public List<Elem> getMoves()
         {
             return moves;
         }
@@ -127,9 +142,10 @@ namespace etf.dotsandboxes.bm170614d
 
         public void addMove(Move m, Color color)
         {
-            if (!exists(m, out color))
+            if (!exists(m, color))
             {
-                moves.Add(m, color);
+                
+                moves.Add(new Elem(m, color));
                 Console.WriteLine("put: " + map(m));
             }
         }
@@ -144,10 +160,15 @@ namespace etf.dotsandboxes.bm170614d
             return false;
         }
 
-        public bool exists(Move m, out Color color)
+        public bool exists(Move m, Color color)
         {
-            Console.WriteLine("get: " + map(m));
-            return moves.TryGetValue(m, out color);
+            // Console.WriteLine("get: " + map(m));
+            Elem e = new Elem(m, color);
+            for (int i = 0; i < moves.Count; i++) {
+                if (e.Equals(moves[i]))
+                    return true;
+            }
+            return false;
         }
 
         public bool get(int r, int c, int direction, Color color)
@@ -155,16 +176,16 @@ namespace etf.dotsandboxes.bm170614d
             switch (direction)
             {
                 case 0:
-                    return getUp(r, c, out color);
+                    return getUp(r, c, color);
                     break;
                 case 1:
-                    return getRight(r, c, out color);
+                    return getRight(r, c, color);
                     break;
                 case 2:
-                    return getDown(r, c, out color);
+                    return getDown(r, c, color);
                     break;
                 case 3:
-                    return getLeft(r, c, out color);
+                    return getLeft(r, c, color);
                     break;
                 default:
                     return false;
@@ -200,31 +221,31 @@ namespace etf.dotsandboxes.bm170614d
             return cnt;
         }
 
-        public bool makesSquare(int r, int c, out Color color) {
-            if (getUp(r,c, out color) && getDown(r, c, out color) && getLeft(r, c, out color) && getRight(r, c, out color)) {
+        public bool makesSquare(int r, int c, Color color) {
+            if (getUp(r,c, color) && getDown(r, c, color) && getLeft(r, c, color) && getRight(r, c, color)) {
                 return true;
             }
             return false;
         }
 
-        public bool getUp(int r, int c, out Color color) {
-            Move m = new Move(r, c, Move.DIRECTION.HORIZONTAL);
-            return exists(m, out color);
+        public bool getUp(int r, int c, Color color) {
+            Move m = new Move(r, c, Move.SIDE.UP);
+            return exists(m, color);
         }
 
-        public bool getDown(int r, int c, out Color color) {
-            Move m = new Move(r+1, c, Move.DIRECTION.HORIZONTAL);
-            return exists(m, out color);
+        public bool getDown(int r, int c,  Color color) {
+            Move m = new Move(r, c, Move.SIDE.DOWN);
+            return exists(m, color);
         }
 
-        public bool getLeft(int r, int c, out Color color) {
-            Move m = new Move(r, c, Move.DIRECTION.VERTICAL);
-            return exists(m, out color);
+        public bool getLeft(int r, int c, Color color) {
+            Move m = new Move(r, c, Move.SIDE.LEFT);
+            return exists(m, color);
         }
 
-        public bool getRight(int r, int c, out Color color) {
-            Move m = new Move(r, c+1, Move.DIRECTION.VERTICAL);
-            return exists(m, out color);
+        public bool getRight(int r, int c, Color color) {
+            Move m = new Move(r, c, Move.SIDE.RIGHT);
+            return exists(m, color);
         }
     }
 

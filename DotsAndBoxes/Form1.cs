@@ -80,33 +80,7 @@ namespace etf.dotsandboxes.bm170614d
 
         //MOUSE EVENT
 
-        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
-        {
-            currX = e.X; currY = e.Y;
-            clicked = true;
-            active = true;
-
-            int side = findClosestEdge(e.X, e.Y, e.Location.X, e.Location.X + boxSize, e.Location.Y, e.Location.Y + boxSize);
-
-            //random
-            Move m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.VERTICAL); 
-           
-            //left
-            if (side == e.Location.X)
-                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.VERTICAL);
-            //right
-            if (side == e.Location.X + boxSize)
-                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.VERTICAL);
-            //up
-            if (side ==  e.Location.Y)
-                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.HORIZONTAL);
-            //down
-            if (side == e.Location.Y+boxSize)
-                m = new Move(convertCoordX(), convertCoordY(), bm170614d.Move.DIRECTION.HORIZONTAL);
-
-            game.getGameState().getCurrentPlayer().setCurrentMove(m);
-            dgv.Update();
-        }
+       
 
         private void Timer1_Tick(object sender, EventArgs e) {
             Move move = game.getGameState().getCurrentPlayer().getCurrentMove();
@@ -153,7 +127,6 @@ namespace etf.dotsandboxes.bm170614d
 
 
 
-
         //DRAWING
 
         private void DataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -174,29 +147,29 @@ namespace etf.dotsandboxes.bm170614d
                 {
                     Color color;
                     //top line
-                    if (game.getGameState().getUp(e.RowIndex, e.ColumnIndex, out color))
+                    if (!game.getGameState().getUp(e.RowIndex, e.ColumnIndex, color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xRight, yUp);
                     }
-                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xLeft, yUp, xRight, yUp); }
+                    
                     //left line
-                    if (game.getGameState().getLeft(e.RowIndex, e.ColumnIndex, out color))
+                    if (game.getGameState().getLeft(e.RowIndex, e.ColumnIndex, color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xLeft, yDown);
                     }
-                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xLeft, yUp, xLeft, yDown); }
+                    
                     //down
-                    if (game.getGameState().getDown(e.RowIndex, e.ColumnIndex, out color))
+                    if (game.getGameState().getDown(e.RowIndex, e.ColumnIndex,  color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xLeft, yDown, xRight, yDown);
                     }
-                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xLeft, yDown, xRight, yDown); }
+                    
                     //right
-                    if (game.getGameState().getRight(e.RowIndex, e.ColumnIndex, out color))
+                    if (game.getGameState().getRight(e.RowIndex, e.ColumnIndex,  color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xRight, yUp, xRight, yDown);
                     }
-                    else { e.Graphics.DrawLine(new Pen(Color.Gray), xRight, yUp, xRight, yDown); }
+                    
                 }
             }
             e.Handled = true;
@@ -312,7 +285,6 @@ namespace etf.dotsandboxes.bm170614d
         }
 
       
-
 
         //ADDITIONAL METHODS
 

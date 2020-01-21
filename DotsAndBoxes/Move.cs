@@ -21,6 +21,17 @@ namespace etf.dotsandboxes.bm170614d
             LEFT,
             RIGHT
         }
+
+        public static SIDE convertSide(int s)
+        {
+            switch (s)
+            {
+                case 0: return SIDE.UP;
+                case 1: return SIDE.DOWN;
+                case 2: return SIDE.LEFT;
+                default: return SIDE.RIGHT;
+            }
+        }
         public Move(int row, int col, SIDE s)
         {
             switch (s)
