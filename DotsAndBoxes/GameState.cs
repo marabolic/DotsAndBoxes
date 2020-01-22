@@ -103,9 +103,11 @@ namespace etf.dotsandboxes.bm170614d
 
         public void readState(StreamReader sr) { //read from file 
             string dimensions = sr.ReadLine();
+            
             string[] splitted = dimensions.Split(' ');
             int r = Convert.ToInt32(splitted[0]);
             int c = Convert.ToInt32(splitted[1]);
+            
             setRowsAndColumns(r, c);
             Color color = game.getPlayer1().getColor();
             while (!sr.EndOfStream)  {
@@ -120,7 +122,10 @@ namespace etf.dotsandboxes.bm170614d
         public StreamWriter writeState()
         {
             StreamWriter sw = new StreamWriter("output.txt");
-            //TODO
+            for (int i = 0; i < moves.Count; i++)
+            {
+                sw.WriteLine(map(moves[i].move));
+            } 
             return sw;
         }
 
@@ -240,7 +245,8 @@ namespace etf.dotsandboxes.bm170614d
                     return true;
                 }
             }
-            color = Color.Gray;
+            color = game.getGameState().getCurrentPlayer().getColor();
+            //color = Color.Purple;
             return false;
         }
 

@@ -87,6 +87,8 @@ namespace etf.dotsandboxes.bm170614d
             Color color = game.getGameState().getCurrentPlayer().getColor();
             if (move != null) {
                 //todo
+                currX = move.getRow();
+                currY = move.getColumn();
                 game.getGameState().addMove(move, color);
             } 
             dgv.Update();
@@ -143,32 +145,34 @@ namespace etf.dotsandboxes.bm170614d
             else {
                 if (game != null)
                 {
+
+
                     Color color;
                     //top line
-                    if (game.getGameState().getUp(e.RowIndex, e.ColumnIndex, out color)) { 
+                    if (game.getGameState().getUp(currX, currY , out color)) { 
                         e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xRight, yUp);
                     }
                     
                     //left line
-                    if (game.getGameState().getLeft(e.RowIndex, e.ColumnIndex, out color))
+                    if (game.getGameState().getLeft(currX, currY, out color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xLeft, yUp, xLeft, yDown);
                     }
                     
                     //down
-                    if (game.getGameState().getDown(e.RowIndex, e.ColumnIndex, out color))
+                    if (game.getGameState().getDown(currX, currY, out color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xLeft, yDown, xRight, yDown);
                     }
                     
                     //right
-                    if (game.getGameState().getRight(e.RowIndex, e.ColumnIndex, out color))
+                    if (game.getGameState().getRight(currX, currY, out color))
                     {
                         e.Graphics.DrawLine(new Pen(color), xRight, yUp, xRight, yDown);
                     } 
 
 
-                    if (game.getGameState().countEdges(e.RowIndex,e.ColumnIndex, color) == 4)
+                    if (game.getGameState().countEdges(currX, currY, color) == 4)
                     {
                         e.Graphics.FillRectangle(new SolidBrush(color), xLeft, yUp, xRight-xLeft , yDown-yUp);
                     }

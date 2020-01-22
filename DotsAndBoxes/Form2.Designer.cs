@@ -120,7 +120,7 @@ namespace etf.dotsandboxes.bm170614d
             this.computerHumanToolStripMenuItem,
             this.computerComputerToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.newToolStripMenuItem.Text = "New";
             // 
             // humanHumanToolStripMenuItem
@@ -170,14 +170,16 @@ namespace etf.dotsandboxes.bm170614d
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click_1);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click_1);
             // 
             // editToolStripMenuItem
             // 
@@ -194,25 +196,25 @@ namespace etf.dotsandboxes.bm170614d
             this.mediumToolStripMenuItem,
             this.hardToolStripMenuItem});
             this.difficultyToolStripMenuItem.Name = "difficultyToolStripMenuItem";
-            this.difficultyToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.difficultyToolStripMenuItem.Size = new System.Drawing.Size(184, 34);
             this.difficultyToolStripMenuItem.Text = "Difficulty";
             // 
             // easyToolStripMenuItem
             // 
             this.easyToolStripMenuItem.Name = "easyToolStripMenuItem";
-            this.easyToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.easyToolStripMenuItem.Size = new System.Drawing.Size(180, 34);
             this.easyToolStripMenuItem.Text = "Easy";
             // 
             // mediumToolStripMenuItem
             // 
             this.mediumToolStripMenuItem.Name = "mediumToolStripMenuItem";
-            this.mediumToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.mediumToolStripMenuItem.Size = new System.Drawing.Size(180, 34);
             this.mediumToolStripMenuItem.Text = "Medium";
             // 
             // hardToolStripMenuItem
             // 
             this.hardToolStripMenuItem.Name = "hardToolStripMenuItem";
-            this.hardToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.hardToolStripMenuItem.Size = new System.Drawing.Size(180, 34);
             this.hardToolStripMenuItem.Text = "Hard";
             // 
             // openFileDialog1
@@ -225,7 +227,6 @@ namespace etf.dotsandboxes.bm170614d
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 26);
             this.numericUpDown1.TabIndex = 12;
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.NumericUpDown1_ValueChanged);
             // 
             // label1
             // 

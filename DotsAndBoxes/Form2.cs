@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace etf.dotsandboxes.bm170614d
 {
@@ -98,20 +99,24 @@ namespace etf.dotsandboxes.bm170614d
             menuItemClick();
         }
 
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             openFileDialog1.Filter = "Text | *.txt";
-            openFileDialog1.ShowDialog();
+            
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string filename = openFileDialog1.FileName;
+                StreamReader sr = new StreamReader(filename);
+                Form1.game = new Game(new Human(), new Computer(difficulty));
+                Form1.game.loadState(sr);
+                menuItemClick();
+            }
+
         }
 
-        private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-
+            Application.Exit();
         }
 
         private void Form2_Load(object sender, EventArgs e)

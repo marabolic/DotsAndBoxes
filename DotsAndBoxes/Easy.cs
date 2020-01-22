@@ -26,7 +26,7 @@ namespace etf.dotsandboxes.bm170614d
                 int side = r.Next(0, 4);
                 m = new Move(row, column, Move.convertSide(side));
                 Color c;
-                if (gameState.exists(m,out  c) ) break;
+                if (!gameState.exists(m,out  c) ) break;
             }
             return m;
         }
